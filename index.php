@@ -437,15 +437,17 @@ The list of journals is a selection of the journals licensed to the library.') ?
 <?php } ?>
 <!-- end screensaver -->
 
-
-<script src="js/vendor/jquery.js"></script>
-<script src="js/foundation.min.js"></script>
-<script src="js/local/simpleCart.custom.js"></script>
-<script src="js/vendor/jquery.unveil.min.js"></script>
-<script src="js/vendor/waypoints.min.js"></script>
-<script src="js/vendor/jquery.timeago.js"></script>
-<script src="js/local/conduit.js"></script>
+<script src="https://cdn.jsdelivr.net/g/jquery@2.1.4,foundation,jquery.unveiljs,jquery.waypoints,jquery.timeago"></script>
+<!-- maybe add local js as fallback?
+script src="js/vendor/jquery.js"></script>
+script src="js/foundation.min.js"></script>
+script src="js/vendor/jquery.unveil.min.js"></script>
+script src="js/vendor/waypoints.min.js"></script>
+script src="js/vendor/jquery.timeago.js"></script>
+-->
 <script src="js/vendor/jquery.quicksearch.min.js"></script>
+<script src="js/local/simpleCart.custom.js"></script>
+<script src="js/local/conduit.js"></script>
 <script>
 simpleCart({
     checkout: {

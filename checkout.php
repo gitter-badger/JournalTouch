@@ -22,16 +22,19 @@ $action = new CheckoutActions();
     <link rel="stylesheet" href="css/local-print.css" media="print" />
     <link rel="stylesheet" href="css/media.css" />
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
-    <script src="js/vendor/modernizr.js"></script>
-    <script src="js/vendor/jquery.js"></script>
-    <script src="js/foundation.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/g/modernizr,jquery@2.1.4,foundation,jquery.unveiljs,jquery.timeago"></script>
+    <!-- maybe add local js as fallback?
+    script src="js/vendor/modernizr.js"></script>
+    script src="js/vendor/jquery.js"></script>
+    script src="js/foundation.min.js"></script>
+    script src="js/vendor/jquery.unveil.min.js"></script>
+    script src="js/vendor/jquery.timeago.js"></script>
+    -->
     <script src="js/local/simpleCart.custom.js"></script>
-    <script src="js/vendor/jquery.unveil.min.js"></script>
-    <script src="js/vendor/jquery.timeago.js"></script>
-    <script src="js/vendor/jquery.quicksearch.min.js"></script>
+    <script src="js/local/conduit.js"></script>
     <script src="js/vendor/citeproc-js/xmldom.js"></script>
     <script src="js/vendor/citeproc-js/citeproc.js"></script>
-    <script src="js/local/conduit.js"></script>
     <script src="js/local/cite.js"></script>
   </head>
   <body>
