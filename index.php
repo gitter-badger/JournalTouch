@@ -69,7 +69,7 @@ foreach ($lister->filters as $key=>$f) {
           </ul>
         </li>
         <?php } ?>
-        <li><a id="switch-view" href="#"><i class="switcher fi-list"></i><span>&#160;<?php echo __('list view') ?></span></a></li>
+        <li><a id="toggle-view" href="#"><i class="switcher fi-list"></i><span>&#160;<?php echo __('list view') ?></span></a></li>
         <li><a href="#" id="myArticles" data-reveal-id="cartPopover"><i class="fi-shopping-bag"></i>&#160;<?php echo __('my basket') ?>(<span class="simpleCart_quantity"></span>)</a></li>
         <li class="divider"></li>
         <li class="has-dropdown switch-language">
@@ -287,34 +287,6 @@ if (!empty($journalUpdates)) {
   </div>
 </div>
 -->
-
-<!-- Version 2: List -->
-<div id="view-accordion" class="row invisible">
-  <div class="small-12 columns">
-    <h3><?php echo __('Browse all journals from A to Z (list view):') ?></h3>
-    <dl class="accordion" data-accordion="">
-<?php
-/* see Class setup */
-foreach ($journals as $j) {
-    /* convert found date of last update in the data to a timestring (gets evaluated with jquery.timeago.js) */
-    $timestring = date('c', strtotime($j['date'])); //
-    $wF = '<time class="timeago" datetime="'.$timestring.'">'.$timestring.'</time>';
-    $new_issues = ($j['new']) ? 'new-issue' : '';
-
-    echo '<dd class="search-filter filter-'.$j['filter'].' '.$j['tags'].' '.$j['topJ'].' '.$new_issues.'">';
-    echo '<a id="'.$j['id'].'" class="getTOC accordion '.$j['id'].'" href="#issn'.$j['id'].'">';
-    echo ($new_issues) ? ' <i class="fi-burst-new large"></i>' : "";
-    echo $j['title'];
-    echo ($new_issues) ? ' <span class="fresh">['.__("last update") .' '. $wF . ']</span>' : "";
-    echo '</a>';
-    echo '<div id="issn'.$j['id'].'" class="content"><div class="toc preloader"></div></div>';
-    echo '</dd>';
-}
-?>
-    </dl>
-  </div>
-</div>
-
 
 <!-- Version 3: Grid -->
 <!-- Thumbnails -->

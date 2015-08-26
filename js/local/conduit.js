@@ -55,7 +55,7 @@ $(document).ready(function() {
 
     $('.alphabet a').click(function() {
         var char = $(this).text();
-        //	$('html,body').animate({scrollTop: $('.getTOC').find('h5[title^="'+char+'"]').offset().top},'slow');
+        //  $('html,body').animate({scrollTop: $('.getTOC').find('h5[title^="'+char+'"]').offset().top},'slow');
         $('html,body').animate({scrollTop: $('#view-grid div.div-grid').filter(':visible').find('h5[title^="'+char+'"]:first').parent().parent().offset().top},'slow');
     });
 
@@ -130,24 +130,13 @@ $(document).ready(function() {
         });
 
         cur = $(this);
-        // check where the user is coming from, accordion or orbit slider
-        if ($(this).is('.accordion')) { accordion = true; grid = false; }
-        else if ($(this).is('.grid')) { grid = true; accordion = false; }
-        else {accordion = false; grid = false;} // set global for later
+        // check where the user is coming from orbit slider
+        if ($(this).is('.grid')) { grid = true; }
+        else {grid = false;} // set global for later
         $('#TOCboxIntro').remove();
         $('.toc.preloader').show();
 
-        if (accordion) {
-            //	$('#fi-x').remove();
-            //	$(this).append('<span id="fi-x">&nbsp;(<i class="fi-x" style="margin-right:0px"></i>)</span');
-            /* add an unobtrusive marking for clicked items */
-            $(this).css('font-style','italic');
-            $(this).next('div.content').append('<div id="fillTOC" style="display:none"></div>');
-            // if ($(this).parents('dd').hasClass('active')) {
-            // 		$(this).css('font-weight','normal');
-            // 		//	$('#fi-x').remove();
-            // }
-        } else if (grid) {
+        if (grid) {
             $('#tocModal').append('<div id="fillTOC" style="display:none"></div>');
             $('#tocModal').foundation('reveal', 'open');
         } else { /* then it's orbit */
@@ -198,13 +187,13 @@ Prerequisites: Make $('a.popup') more generic and maybe add a toc.php with the c
         //});
         /* add a fancy paperclip as a reminder what the user has clicked in this session */
         // $('.'+issn).each(function() {
-        // 		if (($(this).hasClass('accordion'))) {
-        // 				$(this).children('.fi-paperclip').remove();
-        // 				$(this).prepend('<i class="fi-paperclip large"></i>');
-        // 		} else {
-        // 				$(this).prev('.fi-paperclip').remove();
-        // 				$(this).before('<i class="fi-paperclip large"></i>');
-        // 		}
+        //    if (($(this).hasClass('accordion'))) {
+        //        $(this).children('.fi-paperclip').remove();
+        //        $(this).prepend('<i class="fi-paperclip large"></i>');
+        //    } else {
+        //        $(this).prev('.fi-paperclip').remove();
+        //        $(this).before('<i class="fi-paperclip large"></i>');
+        //    }
         // });
     });
 
@@ -233,32 +222,32 @@ Prerequisites: Make $('a.popup') more generic and maybe add a toc.php with the c
     /* click action for fulltext link from toc */
     /* open links in popup (handy when you have a touchscreen in fullscreen mode, but not imperative!) */
     // $(document).on("click","a.item_name",function() {
-    // 		event.preventDefault();
+    //    event.preventDefault();
     //     event.stopPropagation();
     //     window.open(this.href, 'targetWindow', 'left=20,top=20,width=800,height=600,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=0');
     // });
 
     /* try to find an abstract on the link (dirty screenscraping, HIGHLY EXPERIMENTAL) */
     // $(document).on("click","a.item_name",function() {
-    // 		event.preventDefault();
+    //    event.preventDefault();
     //     event.stopPropagation();
-    // 		var link = $(this).attr("href");alert(link);
-    // 		blob = $(this);
-    // 		$.ajax({
-    // 				url: 'ajax/getAbstract.php',
-    // 				data: {'link' : link }
-    // 		}).done(function(returnData) {
-    // 				$(blob).append('<p>'+returnData+'</p>');
-    // 				//
-    // 		}).fail(function() {
-    // 				//
-    // 		});
+    //    var link = $(this).attr("href");alert(link);
+    //    blob = $(this);
+    //    $.ajax({
+    //        url: 'ajax/getAbstract.php',
+    //        data: {'link' : link }
+    //    }).done(function(returnData) {
+    //        $(blob).append('<p>'+returnData+'</p>');
+    //        //
+    //    }).fail(function() {
+    //        //
+    //    });
     // });
 
 
     /* toggle abstracts - we need "on" to access the ajax loaded content, "element.click" will not work */
     //$(document).on("click","a.abstract",function() {
-    ////	$(this).parent().prev().children("div.abstract").toggle("easeOutCubic");
+    ////  $(this).parent().prev().children("div.abstract").toggle("easeOutCubic");
     //$(this).parent().next("div.abstract").fadeToggle();
     //});
 
@@ -329,25 +318,35 @@ Prerequisites: Make $('a.popup') more generic and maybe add a toc.php with the c
         $('#filterPanel').fadeOut();
     });
 
-    /* switch views */
-    $('#switch-view').click(function(){
-        $('.alert-box').hide(); // clean up
-        $('#view-accordion,#view-grid').fadeToggle('linear');
-        if ($(this).children('i').hasClass('fi-list')) {
-            $(this).children('i').removeClass('fi-list').addClass('fi-thumbnails');
-            $(this).children('span').html('&nbsp;grid view');
-            /* deactivate alphabet button bar */
-            $('.alphabet').hide();
-        } else if ($(this).children('i').hasClass('fi-thumbnails')) {
-            $(this).children('i').removeClass('fi-thumbnails').addClass('fi-list');
-            $(this).children('span').html('&nbsp;list view');
-            /* deactivate alphabet button bar */
-            $('.alphabet').show();
-            /* fix for unveil.js so all visible elements will get their appropriate image content
-             * (because lazy load works only on scroll, we will scroll a bit) */
-            $('html,body').animate({scrollTop: $('#switch-view').offset().top},'slow');
-        }
+    /* toogle view - test 2015-08-25 - hmpf*/
+    var toggle = 0;
+    $('#toggle-view').on('click', function(event) {
+      event.preventDefault();
+      $('.alert-box').hide(); // clean up
+      if ( toggle == 0 ){
+        // clicked
+        $(this).children('i').removeClass('fi-thumbnails').addClass('fi-list');
+        $(this).children('span').html('&nbsp;grid view');
+
+        $( "div.search-filter").removeClass('large-4 medium-5');
+//        $('.alphabet').hide();
+        $( "span.metaInfo div").toggle();
+        $( "img.getTOC").unbind( "unveil" ).toggle();
+        toggle = 1;
+      } else {
+        // not clicked
+        $(this).children('i').removeClass('fi-list').addClass('fi-thumbnails');
+        $(this).children('span').html('&nbsp;list view');
+        
+        $( "div.search-filter").addClass('large-4 medium-5');
+//        $('.alphabet').show();
+        setTimeout(function() {$("img.getTOC").unveil();}, 1);
+        $( "span.metaInfo div").toggle();
+        $('img.getTOC').toggle();
+        toggle = 0;
+      }
     });
+
 
     /* check if there are any items in cart on opening */
 
@@ -379,7 +378,7 @@ Prerequisites: Make $('a.popup') more generic and maybe add a toc.php with the c
         /* show reset buttons */
         $('#resetActions, #emptyCart').show();
         /* hide everything inside our box without the class */;
-        //	$('div#actionsResultBox').find('div').show();
+        //  $('div#actionsResultBox').find('div').show();
         $('.'+clickedId).find("*").not(".error").show();
         $('div#actionsResultBox').show();
         /* show everything which has the clicked id as a class */
