@@ -47,7 +47,7 @@ Try here: http://www.coll.mpg.de/bib/jtdemo-public/
 
 ## General
 
-The main page is *index.php* and reads the relevant journals from *input/*. Put a CSV file in here. Alternatively, set up a Google Drive Spreadsheet and read it directly from the web.
+The main page is *index.php* and reads the relevant journals from *data/journals/*. Put a CSV file in here. Alternatively, set up a Google Drive Spreadsheet and read it directly from the web.
 It must at least contain the journal titles and a valid ISSN; configure optional columns in the *config.php* (e.g. for filters). You can add any columns you like (extend the PHP classes).
 
 ### Configure sources for the TOCs
@@ -111,7 +111,7 @@ which handles that in *conduit.js*:
 
 Checkout options are handled in *checkout.php* and the imported classes.
 
-Be sure to set writing rights to *export/*.
+Be sure to set writing rights to *data/export/*.
 
 ### User interaction
 User interaction is handled in *js/local/conduit.js*. and *js/local/frame.js*
@@ -140,6 +140,62 @@ See the examples for special touchscreen customization below in *Customization/R
 
 This webapp is reported to run sluggishly on touch devices running Chrome and Windows 8. On this system configuration, better use current versions of Internet Explorer or Firefox.
 
+# Updating
+JournalTouch currently has no automatic updating script. Some few things have to be done manually.
+## Updating from Release "0" to Release 0.0.1.x
+Release feature
+* Better folder structure
+* Caching of fetched tocs for faster retrieval
+* Fixed lazyloading of covers
+* Improved direct download buttons (more providers)
+* Show Tocs and other information in iframe, so scrolling doesn't move away from the position in the overview. The iframe also has its own back button.
+
+### Get new version
+1. Make a backup of cour config.php
+2. Download and extract Release 0.0.1.x over your old installation
+3. Re-add you backup from step 1
+
+### Folder changes
+Old folder        | Move content to
+----------------- | -----------------
+cache             | data/cache
+export            | data/export
+img/ISSN.*        | img/covers/ISSN.* (all cover images)
+input             | data/journals
+
+After doing this, delete these folder in JournalTouch's root directory
+* cache
+* export
+* foundation-icons
+* input
+* locale
+* services
+
+Also delete this file
+* sys/class.getJournalInfos.php
+
+### Config changes
+A. The cron job pathes have changed
+
+Old path                          | New path
+--------------------------------- | ---------------------------------
+sys/class.getJournalInfos.php     | admin/services/class.UpdateInputCsv.php
+services/getLatestJournals.php    | admin/services/getLatestJournalTocPremium.php
+
+B. Secure admin area
+To protect access to the admin page and the services, modifiy admin/.htaccess to fit your needs.
+
+C. config-default.php
+Very few things have changed. The path to the JournalToc Premium update file is now fixed. Thus the option was removed. Same applies for the input file and it's separator. If you took them over in your config.php, remove these entries there to keep things clean:
+
+* $cfg->api->jt->outfile
+* $cfg->csv_file->path
+* $cfg->csv_file->separator
+
+D. Make data folder writable
+The data folder and it's subfolders should be writable for the webserver. Use the same rights as for the input folder before.
+
+
 # Usage
 
 ## Maintaining journal updates
@@ -148,7 +204,7 @@ The input file feeds the journal list. Be careful if you change the structure of
 
 One of the not-so-trivial things is maintaining the marking of journals as "recently updated".
 There is a basic experimental service that checks on new journal issues. It must be called separately (e.g. daily from a cronjob), and it works only if you have licensed access to the JournalTOCs Premium API. Put the RSS URLs in *config.php* (section updates).
-Run the service *admin/services/getLatestJournals.php* (e.g. on a daily basis). It will output an array of ISSNs that are written to *input/updates.json*. Adapt it to your needs. Currently, it runs a query to JournalTocs, compares the found ISSNs with the local holdings (= your CSV), and adds it to the file with the current date if the journal is in your CSV file. The output file will be read from *sys/class.ListJournals.php* in the function ``isCurrent()`` and add a 'new' marking to the journal array (which then you can read from index.php). 
+Run the service *admin/services/getLatestJournalTocPremium.php* (e.g. on a daily basis). It will output an array of ISSNs that are written to *data/journals/updates.json*. Adapt it to your needs. Currently, it runs a query to JournalTocs, compares the found ISSNs with the local holdings (= your CSV), and adds it to the file with the current date if the journal is in your CSV file. The output file will be read from *sys/class.ListJournals.php* in the function ``isCurrent()`` and add a 'new' marking to the journal array (which then you can read from index.php). 
 
 Additionally, you may want to include the JSON file to display a list of recently updated journals. The function ``getJournalUpdates()`` in *sys/class.ListJournals.php* will give you an array you can read from index.php. See the exemplary code there.
 
@@ -172,7 +228,7 @@ For date display, you can use the timeago jQuery plugin (display timespans inste
 ## Cover images
 
 If you have access to a cover service API, set the setting in *config.php* to ``true``, and configure your service in *sys/class.ListJournals.php* (``getCover()``).
-By default, cover images will be loaded from *img/*, if there exists an image file named after the ISSN (e.g. *0123-4567.png*). If not, a placeholder will be used (configure in *config.php*).
+By default, cover images will be loaded from *img/covers/*, if there exists an image file named after the ISSN (e.g. *0123-4567.png*). If not, a placeholder will be used (configure in *config.php*).
 
 All image content is preloaded from the input file. To make things load faster (e.g. on slow bandwidth), the jQuery plugin unveil.js is loaded by default. The preload image is in the *img/*-directory and is called *lazyloader.gif*. The placeholder image must be set in the *src* attribute of the journal listing. The actual cover image must be placed in the attribute *data-src*. See the listing part in index.php.
 
@@ -260,7 +316,7 @@ Please note: the current mixing of GET/POST and jQuery bits is chaotic. Beware o
 
 ## Export directory
 
-By default, a time-hashed file will be written to *export/* on calling *checkout.php* (``$action->saveArticlesAsCSV($mylist);``). 
+By default, a time-hashed file will be written to *data/export/* on calling *checkout.php* (``$action->saveArticlesAsCSV($mylist);``). 
 **These files will not be deleted by default** (extend the given methods to achieve this).
 
 ## Mailer
@@ -328,7 +384,7 @@ Please note: to make sure that you really have full text access, you might want 
 
 ## Icons
 
-Default for an unified look are the Foundation icons [Foundation-Icons](http://zurb.com/playground/foundation-icon-fonts-3). 
+Default for an unified look are the Foundation icons [covers/](http://zurb.com/playground/foundation-icon-fonts-3). 
 
 **Example: insert a star icon**
 
@@ -350,7 +406,7 @@ able to digest heterogeneous data from different sources (CrossRef,
 JournalTOCs...), some essential metadata fields should be normalized already
  in the TOC snippet (*ajax/get...*). 
 
-When a user clicks on the basket checkout, a csv file will automatically be generated in *export/*. The function is in *sys/class.CheckoutActions.php*: ``saveArticlesAsCSV($mylist)``. When a user wants to export data, all fields will be read from this csv file. Write your mapping into an export function. For example, see the
+When a user clicks on the basket checkout, a csv file will automatically be generated in *data/export/*. The function is in *sys/class.CheckoutActions.php*: ``saveArticlesAsCSV($mylist)``. When a user wants to export data, all fields will be read from this csv file. Write your mapping into an export function. For example, see the
 function ``saveArticlesAsEndnote()``.
 
 Caveat: in the current implementation, mapping of the metadata is limited to the given *simpleCart* fields (``item_name``, ``item_link``, ``item_options_``), and will be re-read from the source string when exporting. This is by no means a clean implementation. It would be better to modify the *simpleCart* js for a cleaner mapping (it is not really a mapping right now). (TODO)
@@ -359,7 +415,7 @@ Caveat: in the current implementation, mapping of the metadata is limited to the
 
 -- TODO -- 
 
-JournalTouch has multilanguage support by default. For details and customization see *locale/*.
+JournalTouch has multilanguage support by default. For details and customization see *languages/*.
 
 # Android Hints
 
