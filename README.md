@@ -142,7 +142,7 @@ This webapp is reported to run sluggishly on touch devices running Chrome and Wi
 
 # Updating
 JournalTouch currently has no automatic updating script. Some few things have to be done manually.
-## Updating from Release "0" to Release 0.0.1.x
+## Updating from Release "0" to Release 0.2.0
 Release feature
 * Better folder structure
 * Caching of fetched tocs for faster retrieval
