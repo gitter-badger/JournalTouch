@@ -132,6 +132,61 @@ See the examples for special touchscreen customization below in *Customization/R
 
 This webapp is reported to run sluggishly on touch devices running Chrome and Windows 8. On this system configuration, better use current versions of Internet Explorer or Firefox.
 
+# Updating
+JournalTouch currently has no automatic updating script. Some few things have to be done manually.
+## Updating from Release "0" to Release 0.0.1.x
+Release feature
+* Better folder structure
+* Caching of fetched tocs for faster retrieval
+* Fixed lazyloading of covers
+* Improved direct download buttons (more providers)
+* Show Tocs and other information in iframe, so scrolling doesn't move away from the position in the overview. The iframe also has its own back button.
+
+### Get new version
+1. Make a backup of cour config.php
+2. Download and extract Release 0.0.1.x over your old installation
+3. Re-add you backup from step 1
+
+### Folder changes
+Old folder        | Move content to
+----------------- | -----------------
+cache             | data/cache
+export            | data/export
+img/ISSN.*        | img/covers/ISSN.* (all cover images)
+input             | data/journals
+
+After doing this, delete these folder in JournalTouch's root directory
+* cache
+* export
+* foundation-icons
+* input
+* locale
+* services
+
+Also delete this file
+* sys/class.getJournalInfos.php
+
+### Config changes
+1. The cron job pathes have changed
+
+Old path                          | New path
+--------------------------------- | ---------------------------------
+sys/class.getJournalInfos.php     | admin/services/class.UpdateInputCsv.php
+services/getLatestJournals.php    | admin/services/getLatestJournalTocPremium.php
+
+2. Secure admin area
+To protect access to the admin page and the services, modifiy admin/.htaccess to fit your needs.
+
+3. config-default.php
+Very few things have changed. The path to the JournalToc Premium update file is now fixed. Thus the option was removed. Same applies for the input file and it's separator. If you took them over in your config.php, remove these entries there to keep things clean:
+* $cfg->api->jt->outfile
+* $cfg->csv_file->path
+* $cfg->csv_file->separator
+
+4. Make data folder writable
+The data folder and it's subfolders should be writable for the webserver. Use the same rights as for the input folder before.
+
+
 # Usage
 
 ## Maintaining journal updates
