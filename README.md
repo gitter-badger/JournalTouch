@@ -167,23 +167,24 @@ Also delete this file
 * sys/class.getJournalInfos.php
 
 ### Config changes
-1. The cron job pathes have changed
+A. The cron job pathes have changed
 
 Old path                          | New path
 --------------------------------- | ---------------------------------
 sys/class.getJournalInfos.php     | admin/services/class.UpdateInputCsv.php
 services/getLatestJournals.php    | admin/services/getLatestJournalTocPremium.php
 
-2. Secure admin area
+B. Secure admin area
 To protect access to the admin page and the services, modifiy admin/.htaccess to fit your needs.
 
-3. config-default.php
+C. config-default.php
 Very few things have changed. The path to the JournalToc Premium update file is now fixed. Thus the option was removed. Same applies for the input file and it's separator. If you took them over in your config.php, remove these entries there to keep things clean:
+
 * $cfg->api->jt->outfile
 * $cfg->csv_file->path
 * $cfg->csv_file->separator
 
-4. Make data folder writable
+D. Make data folder writable
 The data folder and it's subfolders should be writable for the webserver. Use the same rights as for the input folder before.
 
 
