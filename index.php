@@ -63,6 +63,8 @@ $journalUpdates = $lister->getJournalUpdates();
     <link rel="stylesheet" href="css/media.css" />
     <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
     <script src="js/vendor/modernizr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinysort/2.2.2/tinysort.min.js"></script>
+    <!-- http://tinysort.sjeiti.com/ -->
   </head>
 <!-- tell scripts if caching of tocs is enabled -->
 <body data-caching="<?php echo $lister->prefs->cache_toc_enable ?>">
@@ -390,7 +392,8 @@ foreach ($journals as $j) {
     $nbr_title = ($len_title < 100) ? $j['title'] : substr($j['title'], 0, strrpos($j['title'], ' ', $len_title * -1 + 100)).' ...';
 
     echo '<div class="search-filter large-4 medium-5 small-12 columns div-grid filter-'.$j['filter'].' '.$j['tags'].' '.$j['topJ'].' '.$new_issues.'">';
-    echo '<span id="toc-'.$j['id'].'" data-issn="'.$j['id'].'" data-pubdate="'.$j['date'].'"></span>';
+$timestamp = strtotime($j['date']);
+    echo '<span id="toc-'.$j['id'].'" data-issn="'.$j['id'].'" data-pubdate="'.$j['date'].'" data-timestamp="'.$timestamp.'"></span>';
     echo '<img class="getTOC grid '.$j['id'].'" src="img/lazyloader.gif" data-src="'.$j['img'].'">';
     echo ($new_issues) ? '<i class="fi-burst-new large"></i>' : "";
     /* preload $meta here; toggle when the TOC is fired into the Reveal window (see js) */
