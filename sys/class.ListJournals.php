@@ -257,7 +257,7 @@ class ListJournals
         if (($handle = fopen($this->csv_file->path, "r")) !== FALSE) {
             $tagcloud = array();
             $no_date = '1971-01-01'; // Just use the first date from unixtime - makes it easy to check anywhere else for a "non-date", without breaking anything
-            // @todo: 2015-09-01: a) Sometimes I got a 1970-01-01 date in my csv (why?) and b) this date is stupid, because it creates a small timestamp ;)
+            // @todo: 2015-09-01: a) Sometimes I got a 1970-01-01 date in my csv (why?) and b) this date is stupid, because it creates a small timestamp (but it should be ok on descending - argh)
             while (($data = fgetcsv($handle, 1000, $this->csv_file->separator)) !== FALSE) {
                 $num = count($data);
 
@@ -265,7 +265,7 @@ class ListJournals
                 $myISSN = (strlen($data[$this->csv_col->p_issn] < 1) ? $data[$this->csv_col->e_issn] : $data[$this->csv_col->p_issn]);
 
                 $row++;
-                $date = ($data[$this->csv_col->date] && $data[$this->csv_col->date] != '1970-0-01') ? $data[$this->csv_col->date] : $no_date;
+                $date = ($data[$this->csv_col->date] && $data[$this->csv_col->date] != '1970-01-01') ? $data[$this->csv_col->date] : $no_date;
                 $filter = (!empty($data[$this->csv_col->filter]) ? strtolower($data[$this->csv_col->filter]) : "any");
                 $topJ = (!empty($data[$this->csv_col->important]) ? "topJ" : "");
                 $img = $this->getCover($myISSN);

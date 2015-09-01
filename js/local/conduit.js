@@ -46,7 +46,7 @@ function createModalFrame(href) {
 
 $(document).ready(function() {
 
-    tinysort('#journalList>div.search-filter',{selector:'span',data:'timestamp'});
+    tinysort('#journalList>div.search-filter',{selector:'span',data:'timestamp'},{order:'desc'});
 
     /* run unveil plugin on page load */
     setTimeout(function() {$("img.getTOC").unveil();}, 1);
