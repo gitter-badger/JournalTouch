@@ -7,6 +7,8 @@
  * @copyright 2014-2015 MPI for Research on Collective Goods, Library
  * @license http://www.gnu.org/licenses/gpl.html GPL version 3 or higher
  *
+ * @todo: Future dates are possible. tinysort does it right, but timeago always says "ago", even for future dates...
+ *
  * Time-stamp: "2014-04-10 14:38:04 zimmel"
  *
  */
@@ -46,7 +48,9 @@ function createModalFrame(href) {
 
 $(document).ready(function() {
 
-    tinysort('#journalList>div.search-filter',{selector:'span',data:'timestamp'},{order:'desc'});
+    // Sort by newest first
+    //tinysort('#journalList div.search-filter>.getTOC h5', {order:'desc'}); // Titel umgekehrt
+    tinysort('#journalList div.search-filter', {selector:'span.datapool', data:'timestamp', order:'desc'});
 
     /* run unveil plugin on page load */
     setTimeout(function() {$("img.getTOC").unveil();}, 1);

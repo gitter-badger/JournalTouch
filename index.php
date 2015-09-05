@@ -392,8 +392,8 @@ foreach ($journals as $j) {
     $nbr_title = ($len_title < 100) ? $j['title'] : substr($j['title'], 0, strrpos($j['title'], ' ', $len_title * -1 + 100)).' ...';
 
     echo '<div class="search-filter large-4 medium-5 small-12 columns div-grid filter-'.$j['filter'].' '.$j['tags'].' '.$j['topJ'].' '.$new_issues.'">';
-$timestamp = strtotime($j['date']);
-    echo '<span id="toc-'.$j['id'].'" data-issn="'.$j['id'].'" data-pubdate="'.$j['date'].'" data-timestamp="'.$timestamp.'"></span>';
+$timestamp = DateTime::createFromFormat('Y-m-d', $j['date'])->getTimestamp();
+    echo '<span id="toc-'.$j['id'].'" data-issn="'.$j['id'].'" data-pubdate="'.$j['date'].'" data-timestamp="'.$timestamp.'" class="datapool"></span>';
     echo '<img class="getTOC grid '.$j['id'].'" src="img/lazyloader.gif" data-src="'.$j['img'].'">';
     echo ($new_issues) ? '<i class="fi-burst-new large"></i>' : "";
     /* preload $meta here; toggle when the TOC is fired into the Reveal window (see js) */

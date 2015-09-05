@@ -32,7 +32,7 @@ if (!$issn) {
 if (!isset($_GET['pubdate'])) {
   $age = -1; // Since the difference might be 0 days (today), we define false as -1
 }
-elseif ($_GET['pubdate'] == '1971-01-01') {
+elseif ($_GET['pubdate'] == '1970-01-01') {
   $age = -1; // never cache if we got no real date
 }
 // Todo: This is pretty pointless. Only future use: _might_ be useful to use the age as additional info for the toc frame
